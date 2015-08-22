@@ -1,0 +1,10 @@
+sublime/
+sync_vid_tag_pose/catkin/
+sync_vid_tag_pose/catkin_generated/
+sync_vid_tag_pose/CMakeFiles/
+sync_vid_tag_pose/devel/
+sync_vid_tag_pose/gtest/
+sync_vid_tag_pose/sublime/
+sync_vid_tag_pose/test_results/
+log
+CMakeCache.txt
