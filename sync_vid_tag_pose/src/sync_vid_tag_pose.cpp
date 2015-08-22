@@ -14,7 +14,7 @@ sync_publisher_t::sync_publisher_t(ros::NodeHandle &nh,
                                    string tag_topic,
                                    int fps,
                                    cv::Size frame_size,
-                                   bool disp_enable)
+                                   int disp_enable)
 : sync_out_nh(nh),
   video_filename(video_name),
   topic_name_camera(camera_topic),
@@ -24,7 +24,7 @@ sync_publisher_t::sync_publisher_t(ros::NodeHandle &nh,
   sub_pose(nh,pose_topic,30),
   sub_tag(nh,tag_topic,30),
   curr_sync_policy(sync_policies_t(30),sub_camera,sub_pose,sub_tag),
-  video_writer(nh,camera_topic,video_name,fps,frame_size,1)
+  video_writer(video_name, fps, frame_size, disp_enable)
 { 
   ROS_INFO_STREAM("Hey there");
   curr_sync_policy.registerCallback(boost::bind(&sync_publisher_t::callback_message_filter,this,_1,_2,_3));
@@ -51,7 +51,7 @@ sync_publisher_t::sync_publisher_t(ros::NodeHandle &nh,
                                    string tag_topic,
                                    int fps,
                                    cv::Size frame_size, 
-                                   bool disp_enable,
+                                   int disp_enable,
                                    string &text_name)
 : sync_out_nh(nh),
   video_filename(video_name),
@@ -63,7 +63,7 @@ sync_publisher_t::sync_publisher_t(ros::NodeHandle &nh,
   sub_tag(nh,tag_topic,10),
   text_filename(text_name),
   curr_sync_policy(sync_policies_t(10),sub_camera,sub_pose,sub_tag),
-  video_writer(nh,camera_topic,video_name,fps,frame_size,1)
+  video_writer(video_name, fps, frame_size, disp_enable)
 {
   curr_sync_policy.registerCallback(boost::bind(&sync_publisher_t::callback_message_filter,this,_1,_2,_3));
   const char * text_filename_char = text_filename.c_str();
@@ -84,7 +84,6 @@ sync_publisher_t::sync_publisher_t(ros::NodeHandle &nh,
 
   return;
 }
-
 
 
 /**
@@ -166,7 +165,7 @@ void sync_publisher_t::write_to_text_file() {
 void sync_publisher_t::callback_message_filter(const Image::ConstPtr &image, 
                                                const PoseStamped::ConstPtr &lidar_pose,
                                                const AprilTagList::ConstPtr &tags){
-  ROS_INFO_STREAM(__func__);
+  // ROS_INFO_STREAM(__func__);
   curr_data_frame.header.stamp = ros::Time::now(); // new time stamp
   curr_data_frame.tag_list.n_tags = tags->n_tags;
   curr_data_frame.tag_list.april_tags = tags->april_tags;
@@ -183,4 +182,6 @@ void sync_publisher_t::callback_message_filter(const Image::ConstPtr &image,
   }
   // call ros::NodeHandle::publish here
   pub_sync_frame.publish(curr_data_frame);
+  video_writer.process_frame(image);
+  return;
 }

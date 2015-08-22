@@ -14,7 +14,7 @@
 #include <fstream>
 #include <string>
 
-#include "video_writer_t.hpp"
+#include "vid_frame_writer_t.hpp"
 
 using namespace sensor_msgs;
 using namespace message_filters;
@@ -34,22 +34,19 @@ using std::fstream;
 */
 
 class sync_publisher_t {
-  public:
-    
+  public:   
     sync_publisher_t(ros::NodeHandle &nh, string &video_filename, 
                      string camera_topic, string pose_topic, string tag_topic,
-                     int fps, cv::Size frame_size, bool disp_enable );
+                     int fps, cv::Size frame_size, int disp_enable );
     sync_publisher_t(ros::NodeHandle &nh, string &video_filename, 
                      string camera_topic, string pose_topic, string tag_topic,
-                     int fps, cv::Size frame_size, bool disp_enable, 
+                     int fps, cv::Size frame_size, int disp_enable, 
                      string &text_filename);
     ~sync_publisher_t();
-    // void publish_data(void); <Dont think I need this>
     void write_to_text_file(void);
     void callback_message_filter(const Image::ConstPtr &image, 
                                  const PoseStamped::ConstPtr &pose,
                                  const AprilTagList::ConstPtr &tags);
-
 
   private:
     ros::NodeHandle &sync_out_nh;
@@ -70,7 +67,7 @@ class sync_publisher_t {
     const string &topic_name_pose;
     const string &topic_name_tag;
 
-    video_writer_t video_writer;
+    vid_frame_writer_t video_writer;
 };
 
 

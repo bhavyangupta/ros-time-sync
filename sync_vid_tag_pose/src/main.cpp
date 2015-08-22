@@ -91,14 +91,11 @@ int main(int argc, char ** argv){
   nh.getParam("width",frame_width);
   nh.getParam("height",frame_height);
   nh.getParam("fps",fps);
-  nh.getParam("disp_enable",disp_enable);
+  nh.getParam("display",disp_enable);
 
   video_filename = video_filename + ".mkv";
   text_filename = text_filename + ".txt";
 
-  if (disp_enable){
-    disp_flag = true;
-  }
 
   cv::Size frame_size(frame_width, frame_height);
 
@@ -112,7 +109,7 @@ int main(int argc, char ** argv){
       ROS_INFO_STREAM("Sync with text file output: "<< text_filename);
       sync_publisher_t sync_with_file(nh,video_filename,topic_camera_str,
                                       topic_pose_str,topic_tag_str,fps,
-                                      frame_size,disp_flag,text_filename);
+                                      frame_size,disp_enable,text_filename);
       ros::spin();
     }
   }
@@ -122,7 +119,7 @@ int main(int argc, char ** argv){
     ROS_INFO_STREAM(video_filename<<" "<<topic_camera_str<<" "<<topic_pose_str <<" "<<topic_tag_str);
     sync_publisher_t sync_without_file(nh,video_filename,topic_camera_str,
                                        topic_pose_str,topic_tag_str,fps,
-                                       frame_size,disp_flag);
+                                       frame_size,disp_enable);
   
     ros::spin();
   }

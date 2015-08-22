@@ -24,7 +24,7 @@ include_directories(inc/)
 add_executable(sync_vid_tag_pose_node 
                src/main.cpp 
                src/sync_vid_tag_pose.cpp 
-               src/video_writer_t.cpp)
+               src/vid_frame_writer_t.cpp)
 add_dependencies(sync_vid_tag_pose_node april_tag_generate_messages_cpp)
 
 target_link_libraries(sync_vid_tag_pose_node ${catkin_LIBRARIES} 
