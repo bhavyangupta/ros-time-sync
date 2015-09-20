@@ -38,9 +38,9 @@
 Entries are stored row-wise in the following format:
 
 [secs:nsecs],robot.position.x,robot.position.y,robot.position.z,
-robot.orientation.x,robot.orientaionntation.y,robot.orientation.z,robot.orientation.w,
-number_of_tags,tag1.position.x,tag1.position.y,tag1.position.z,tag1.orientation.roll,
-tag1.orientaion.pitch,tag1.orientation.yaw,....
+robot.orientation.x,robot.orientation.y,robot.orientation.z,robot.orientation.w,
+number_of_tags,tag1_id,tag1.position.x,tag1.position.y,tag1.position.z,tag1.orientation.roll,
+tag1.orientaion.pitch,tag1.orientation.yaw....
 
 * \warning  This code is based a highly modified version of the april_tag package
 * \author Bhavya Narain Gupta

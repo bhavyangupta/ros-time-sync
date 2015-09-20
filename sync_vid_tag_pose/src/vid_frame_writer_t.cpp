@@ -21,7 +21,7 @@ vid_frame_writer_t::vid_frame_writer_t(string output,
   ROS_INFO_STREAM(__func__ << " "<< display<<" "<<disp_name);
   this->open_output_file();
   if(display_enable){
-    ROS_INFO_STREAM("spawning_window");
+    ROS_INFO_STREAM("spawning_window" << this->window_name);
     this->spawn_display_window();
   }
   return;

@@ -65,6 +65,7 @@ sync_publisher_t::sync_publisher_t(ros::NodeHandle &nh,
   curr_sync_policy(sync_policies_t(10),sub_camera,sub_pose,sub_tag),
   video_writer(video_name, fps, frame_size, disp_enable)
 {
+  ROS_INFO_STREAM(__func__);
   curr_sync_policy.registerCallback(boost::bind(&sync_publisher_t::callback_message_filter,this,_1,_2,_3));
   const char * text_filename_char = text_filename.c_str();
   pub_sync_frame = sync_out_nh.advertise<synced_frame>("synced_tag_and_pose",10);
@@ -113,7 +114,7 @@ Entries are stored row-wise in the following format:
 
 [secs:nsecs],robot.position.x,robot.position.y,robot.position.z,
 robot.orientation.x,robot.orientation.y,robot.orientation.z,robot.orientation.w,
-number_of_tags,tag1.position.x,tag1.position.y,tag1.position.z,tag1.orientation.roll,
+number_of_tags,tag1_id,tag1.position.x,tag1.position.y,tag1.position.z,tag1.orientation.roll,
 tag1.orientaion.pitch,tag1.orientation.yaw....
 
 * \param None
@@ -141,7 +142,16 @@ void sync_publisher_t::write_to_text_file() {
   }
   else{
     text_file_handle<<",";
-    // TODO: Loop here to write the tag data:
+    for (int i = 0;i<number_of_tags;i++){
+      text_file_handle<<curr_data_frame.tag_list.april_tags[i].id<<",";
+      text_file_handle<<curr_data_frame.tag_list.april_tags[i].x<<",";
+      text_file_handle<<curr_data_frame.tag_list.april_tags[i].y<<",";
+      text_file_handle<<curr_data_frame.tag_list.april_tags[i].z<<",";
+      text_file_handle<<curr_data_frame.tag_list.april_tags[i].roll<<",";
+      text_file_handle<<curr_data_frame.tag_list.april_tags[i].pitch<<",";
+      text_file_handle<<curr_data_frame.tag_list.april_tags[i].yaw<<",";
+    }
+    text_file_handle<<"\n";
   }
 
   return;
@@ -165,7 +175,7 @@ void sync_publisher_t::write_to_text_file() {
 void sync_publisher_t::callback_message_filter(const Image::ConstPtr &image, 
                                                const PoseStamped::ConstPtr &lidar_pose,
                                                const AprilTagList::ConstPtr &tags){
-  // ROS_INFO_STREAM(__func__);
+  ROS_INFO_STREAM(__func__);
   curr_data_frame.header.stamp = ros::Time::now(); // new time stamp
   curr_data_frame.tag_list.n_tags = tags->n_tags;
   curr_data_frame.tag_list.april_tags = tags->april_tags;

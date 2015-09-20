@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(ros_time_sync)
-set(ROS_BUILD_TYPE Debug)
+
+#set(ROS_BUILD_TYPE Debug)
 message(STATUS ${CMAKE_PREFIX_PATH})
 
 set(april_tag_DIR "")
